@@ -1,3 +1,4 @@
+import 'package:bloc_tutorial/bloc/auth/auth_bloc.dart';
 import 'package:bloc_tutorial/bloc/theme/theme_bloc.dart';
 import 'package:bloc_tutorial/cubit/load_cubit.dart';
 import 'package:bloc_tutorial/ui/home_page_cubit.dart';
@@ -29,8 +30,11 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ThemeBloc(),
-        ),BlocProvider(
+        ),
+        BlocProvider(
           create: (context) => LoadCubit(),
+        ), BlocProvider(
+          create: (context) => AuthBloc(),
         ),
       ],
       child: BlocBuilder<LoadCubit, int>(
@@ -38,13 +42,15 @@ class MyApp extends StatelessWidget {
           return BlocBuilder<ThemeCubit, ThemeData>(
             builder: (contextCubit, themeCubicState) {
               return BlocBuilder<ThemeBloc, ThemeState>(
-              builder: (context, state) => MaterialApp(
-                title: 'Flutter Demo',
-                debugShowCheckedModeBanner: false,
-                theme: context.read<LoadCubit>().state == 1? context.read<ThemeBloc>().themeData:contextCubit.read<ThemeCubit>().state,
-                home: LandingScreen(),
-              ),
-            );
+                builder: (context, state) => MaterialApp(
+                  title: 'Flutter Demo',
+                  debugShowCheckedModeBanner: false,
+                  theme: context.read<LoadCubit>().state == 1
+                      ? context.read<ThemeBloc>().themeData
+                      : contextCubit.read<ThemeCubit>().state,
+                  home: LandingScreen(),
+                ),
+              );
             },
           );
         },
@@ -60,54 +66,39 @@ class LandingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            child: InkWell(
-              onTap: () {
-                context.read<LoadCubit>().select(0);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePageCubit(),
-                  ),
-                );
-              },
-              child: Center(
-                child: Container(
-                  padding: EdgeInsets.all(12),
-                  child: Text('Using Cubit'),
-                ),
+          TextButton(onPressed: () {
+            context.read<LoadCubit>().select(0);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePageCubit(),
               ),
-            ),
-          ),
-          Expanded(
-            child: InkWell(
-              onTap: () {
-
-                context.read<LoadCubit>().select(1);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePageBloc(),
-                  ),
-                );
-              },
-              child: Center(
-                child: Container(
-                  padding: EdgeInsets.all(12),
-                  child: Text("Using Bloc"),
-                ),
+            );
+          }, child: Text('Using Cubit'),),
+          TextButton(onPressed: () {
+            context.read<LoadCubit>().select(1);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePageBloc(),
               ),
-            ),
-          ),
+            );
+          }, child: Text("Using Bloc"),)
         ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.login_outlined),
         onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
-      },),
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+              ));
+        },
+      ),
     );
   }
 }

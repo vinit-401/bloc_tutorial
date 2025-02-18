@@ -1,3 +1,6 @@
+
+import 'dart:io';
+
 import 'package:bloc_tutorial/api/api_config.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,6 +17,23 @@ class APIRequests{
     }
     catch(e){
       print(e);
+    }
+  }
+
+ static Future<String?> postRequest(String requestUrl, Map<String, String> mapBody) async{
+    try{
+      http.Response res =await http.post(Uri.parse("$url$requestUrl"), body:mapBody );
+      print(res.statusCode);
+      if(res.statusCode == 200) {
+        return res.body;
+      }
+      else {
+        return null;
+      }
+    }
+    on HttpException catch(e){
+     print( e.message.toString);
+     return null;
     }
   }
 }

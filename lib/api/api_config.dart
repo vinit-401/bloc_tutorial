@@ -1,1 +1,1 @@
-String url = 'https://reqres.in/';
+String url = 'https://reqres.in/api';
