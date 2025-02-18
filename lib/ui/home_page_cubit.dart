@@ -14,6 +14,11 @@ class HomePageCubit extends StatefulWidget {
 
 class _HomePageCubitState extends State<HomePageCubit> {
   final TextEditingController _titleController = TextEditingController();
+  @override
+  void initState() {
+    context.read<TodoCubit>().getTodoList();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

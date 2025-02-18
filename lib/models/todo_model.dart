@@ -10,14 +10,15 @@ class TodoModel {
   final String createdAt;
    bool isCompleted;
 
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['title'] = title;
-    map['createdAt'] = createdAt;
-    map['isCompleted'] = isCompleted;
-    return map;
-  }
+  Map<String, dynamic> toJson() => {
+    'title': title,
+    'createdAt':createdAt,
+   'isCompleted': isCompleted,
+  };
 
+  factory TodoModel.fromJson(Map<String, dynamic> json){
+    return TodoModel(title: json['title'], createdAt: json['createdAt'],isCompleted: json['isCompleted']);
+  }
   @override
   String toString() {
     return 'TodoModel{title: $title, createdAt: $createdAt, isCompleted: $isCompleted}\n';

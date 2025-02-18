@@ -3,6 +3,7 @@
 A new Flutter project.
 
 ## Getting Started
+- consumer --> listener + builder. 
 
 This project is a starting point for a Flutter application.
 

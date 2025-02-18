@@ -2,6 +2,7 @@ import 'package:bloc_tutorial/bloc/theme/theme_bloc.dart';
 import 'package:bloc_tutorial/cubit/load_cubit.dart';
 import 'package:bloc_tutorial/ui/home_page_cubit.dart';
 import 'package:bloc_tutorial/ui/home_page_bloc.dart';
+import 'package:bloc_tutorial/ui/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -102,6 +103,11 @@ class LandingScreen extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.login_outlined),
+        onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
+      },),
     );
   }
 }

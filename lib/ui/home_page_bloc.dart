@@ -5,11 +5,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/todo/todo_bloc.dart';
 
-class HomePageBloc extends StatelessWidget {
+class HomePageBloc extends StatefulWidget {
   const HomePageBloc({super.key});
 
   @override
+  State<HomePageBloc> createState() => _HomePageBlocState();
+}
+
+class _HomePageBlocState extends State<HomePageBloc> {
+  @override
+  void initState() {
+    context.read<TodoBloc>().add(GetTodoList());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final theme = context.watch<ThemeBloc>().themeData;
     return Scaffold(
       appBar: AppBar(
         title: Text("Todo using Bloc"),
@@ -18,7 +30,7 @@ class HomePageBloc extends StatelessWidget {
             onPressed: () {
               context.read<ThemeBloc>().add(ToggleEventTheme(ThemeData.light()));
             },
-            icon: Icon(context.read<ThemeBloc>().themeData == ThemeData.light() ? Icons.dark_mode : Icons.light_mode),
+            icon: Icon(theme == ThemeData.light() ? Icons.dark_mode : Icons.light_mode),
           ),
         ],
       ),
@@ -32,30 +44,33 @@ class HomePageBloc extends StatelessWidget {
             return Center(
               child: CircularProgressIndicator(),
             );
-          } else if (state is TodoSuccessState) {
-            return state.list.isEmpty ? Center(
-                child: Icon(
-                  Icons.task_alt,
-                  size: 45,
-                )):ListView.builder(
-              itemCount: state.list.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: Checkbox(
-                    value: state.list[index].isCompleted,
-                    onChanged: (value) {
-                      context.read<TodoBloc>().add(UpdateTodo(index: index));
+          }
+          else if (state is TodoSuccessState) {
+            return state.list.isEmpty
+                ? Center(
+                    child: Icon(
+                    Icons.task_alt,
+                    size: 45,
+                  ))
+                : ListView.builder(
+                    itemCount: state.list.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: Checkbox(
+                          value: state.list[index].isCompleted,
+                          onChanged: (value) {
+                            context.read<TodoBloc>().add(UpdateTodo(index: index));
+                          },
+                        ),
+                        title: Text(state.list[index].title),
+                        trailing: IconButton(
+                            onPressed: () {
+                              context.read<TodoBloc>().add(RemoveTodo(index: index));
+                            },
+                            icon: Icon(Icons.delete)),
+                      );
                     },
-                  ),
-                  title: Text(state.list[index].title),
-                  trailing: IconButton(
-                      onPressed: () {
-                        context.read<TodoBloc>().add(RemoveTodo(index: index));
-                      },
-                      icon: Icon(Icons.delete)),
-                );
-              },
-            );
+                  );
           } else {
             return Center(
               child: Text("Something went Wrong"),

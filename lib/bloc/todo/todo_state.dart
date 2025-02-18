@@ -16,7 +16,6 @@ final class TodoFailureState extends TodoState{
   TodoFailureState(this.errorMessage);
 }
 final class TodoLoadingState extends TodoState{
-
 }
 
 // initial empty State
